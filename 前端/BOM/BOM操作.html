@@ -1,0 +1,141 @@
+ <!-- Bom：浏览器对象模型（Browser Object Model，简称 BOM）提供了独立于内容而与浏览器窗口进行交互的对象。描述了与浏览器进行交互的方法和接口，可以对浏览器窗口进行访问和操作
+
+　　　　（1）window对象：当前浏览器窗体
+　　　　　　　　属性：
+　　　　　　　　　　status：状态栏(目前浏览器已弃用了）
+
+　　　　　　　　　　opener：即谁打开我的，若在A用open打开B则B的opener就是A
+
+　　　　　　　　　　closed：判断子窗体是否关闭
+
+　　　　　　　　方法：
+　　　　　　　　　　alert()  弹出框
+
+　　　　　　　　　　confirm() 带确认,取消弹出框
+
+　　　　　　　　　　setInterval() 每隔多少秒调用一次
+
+　　　　　　　　　　clearInterval() 清除setInterval
+
+　　　　　　　　　　setTimeout() 隔多少秒调用一次
+
+　　　　　　　　　　cleartimeout() 清除setTimeout
+
+　　　　　　　　　　open() 打开一个新的窗口
+
+　　　　　　　　　　　eg :  window.open("other.html"," _blank","width=200,height=300,top=300");   
+
+　　　　　　　　　　console:最常用的就是console.log()浏览器控制台打印
+　　　　（2）子对象：doument loation history screen ……
+
+　　　　　　1、 doument  （讲dom已经介绍过它的属性方法 ，有感兴趣的可以翻看dom操作）
+
+　　　　　　2、 loation 跳转位置
+　　　　　　　　<meta http-equiv="refresh" content="3; url =http://www.hteis.cn";>      //不加url指3秒刷新一次，加url指3秒跳转
+　　　　　　　　window.location.href="popl.html";
+　　　　　　　　location = pop.html
+　　　　　　　　location.replace("pop.html") //浏览器不可以后退
+
+　　　　　　3、 history 历史
+　　　　　　　　history.back() == history.go(-1)   //返回到前一页
+　　　　　　　　history.go(-2) //括号里的参数负几就是返回前几步
+
+　　　　　　　　eg: <a href="javascript:history.back()">返回上一页</a>
+
+　　　　　　　　　　<a href="javascript:history.go(-2)">第一页</a>
+
+
+　　　　　　4、 screen //屏幕
+　　　　　　　　screen.availHeight //屏幕实际高度
+　　　　　　　　screen.availWidth //屏幕实际宽度
+　　　　　　　　screen.height //屏幕高度
+　　　　　　　　screen.width //屏幕宽度　
+
+        console.log("屏幕实际高度"+screen.availHeight);
+        console.log("屏幕实际宽度"+screen.availWidth);
+        console.log("屏幕高度"+screen.height);
+        console.log("屏幕宽度"+screen.width); -->
+
+
+<!-- 最后赋一个使用计时器做的小例子，跑马灯和小球运动效果 -->
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            #one{
+                width:100px;
+                height: 100px;
+                background-color: red;
+                position: fixed;
+                left:0;
+                top:0;
+                border-radius: 50%;
+            }
+            #two{
+                width:100px;
+                height:20px;
+                background-color: #0f0;
+                position: fixed;
+                right:10px;
+                top:10px;
+            }
+            html,body{
+                width:100%;    
+                height:100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="one"></div>
+        <div id="two">跑起来</div>
+        <script>
+            var x = 0;
+            var y = 0;
+            var xs=10;
+            var ys=10;
+            var left = document.body.clientWidth;
+            var one = document.getElementById("one");
+            var two = document.getElementById("two");
+            function move(){
+                x += xs;
+                y += ys;
+                if(x >= document.body.clientWidth-one.offsetWidth-20 || x < 0){
+                    xs=-1*xs;
+                }
+                if(y >= document.body.clientHeight-one.offsetHeight-20 || y < 0){
+                    ys=-1*ys;
+                }
+                
+                one.style.left = x+"px";
+                one.style.top = y+"px";
+            }
+            var dt = setInterval("move()",100);
+            one.onmouseover = function(){
+                clearInterval(dt)
+            }
+            one.onmouseout = function(){
+                dt = setInterval("move()",100);
+            }
+
+            //跑马灯
+            function leftMove(){
+                if(left <=100){
+                    left =  document.body.clientWidth;
+                }
+                left=left-10;
+                two.style.left = left+"px";
+            }
+            
+            var dl = setInterval("leftMove()",100);
+            two.onmouseover = function(){
+                clearInterval(dl);
+            }
+            two.onmouseout = function(){
+                dl = setInterval("leftMove()",100);
+            }
+        </script>
+    </body>
+    </html>
