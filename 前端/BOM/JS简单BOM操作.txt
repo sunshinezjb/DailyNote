@@ -1,0 +1,44 @@
+浏览器开发者工具中的console可以直接输入JS代码操作网页，比如最简单的修改网页的标题document.title='hello world!'。
+操作的当然是本地下载的网页，不可能去操作网站的网页。
+
+window
+window表示浏览器窗口，也是全局作用域，故window的成员就是全局变量，window.key 等效于 key。window对象的成员。
+
+innerWidth，innerHeight：浏览器窗口宽度和高度
+close()：关闭当前窗口（只能关闭由JS代码打开的窗口）
+open(url)：打开新窗口，不加参数就是打开空白窗口，如果参数不是完整的URL，那这个参数会被追加到当前URL之后，成为一个新的URL，新打开的窗口就是使用这个新的URL
+alert(string)：提示框
+confirm(string)：确认框，点【确定】返回true；点【取消】返回false
+prompt(text,default_text)：输入框，第一个参数是提示，第二个参数是输入框中的默认文本，点【确定】返回输入框中的内容，【取消】返回null
+setTimeout(code,millisec)：指定在多少毫秒之后执行一段代码，这段代码要用字符串形式表示，比如setTimeout("alert('5 seconds!')",5000)；即便这个code用的是一个函数名，这个函数名也要用双引号包围
+setInterval(code,millisec[,"lang"])：每个一段之间执行代码，可选参数long先不管
+clearInterval(id)/clearTimeout(id)：清除上面设置的定时器，id就是上面的函数返回的值
+navigator：浏览器的信息
+
+navigator.appName：浏览器名称；
+navigator.appVersion：浏览器版本；
+navigator.language：浏览器设置的语言；
+navigator.platform：操作系统类型；
+navigator.userAgent：浏览器设定的User-Agent字符串。
+screen.width：屏幕宽度；screen.height：屏幕高度。是整个屏幕的宽高，比如1366x768
+
+location：当前网址
+如果URL是http://www.example.com:8080/path/index.html?a=1&b=2#TOP
+
+location.href：获取完整网址
+location.protocol; // 'http'
+location.host; // 'www.example.com'
+location.port; // '8080'
+location.pathname; // '/path/index.html'
+location.search; // '?a=1&b=2'
+location.hash; // 'TOP'
+location.reload(); //刷新当前网页
+修改这些属性，可以重定向当前网页，比如location.href='https://www.baidu.com'（必须输完整）；
+loaction.host='google.com'，用host的话可以少输很多
+
+history：当前页面的历史记录，不是当前浏览器的！
+
+history.length：有几条历史记录
+history.back()：后退一页
+history.forward()：前进一页
+history.go(n)：负数表示后退，正数表示前进，0表示当前页；跳转到某一页（0就是刷新当前页）
