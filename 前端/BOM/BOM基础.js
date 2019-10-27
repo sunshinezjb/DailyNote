@@ -83,7 +83,9 @@ window.screen.height //返回当前屏幕高度(分辨率值)
 
 // 3、window下的弹框方法
 
-    alert()   prompt()  confirm()
+    alert()   
+    prompt()  
+    confirm()
     confirm:
 <script>
             if(window.confirm("熊哥帅不帅？")){
