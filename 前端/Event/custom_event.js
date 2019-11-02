@@ -85,7 +85,7 @@ _$.prototype = {
                 el["ev" + type] = ev;
             }  
         } else if (window.attachEvent) {
-            el.attachEvent("on" + type, fn);    
+            el.attachEvent("on" + type, fn);
             if (isNaN(el["cu" + type])) {
                 // 自定义属性
                 el["cu" + type] = 0; 
@@ -159,7 +159,7 @@ $(e.target).fireEvent("alert");
 
 var EventTarget=function(){
          this._listeners={};
-     }
+     };
 
 EventTarget.prototype={
          constructor:this,
@@ -226,5 +226,94 @@ function showMsg(event) {  
 }
 
 
+/**----------------------------------------------------------------------------------------------------------------------------------------- */
+
+// 自定义事件
+// 事件是与DOM交互的最常见的方式。通过实现自定义事件，可以让事件用于非DOM代码中。 
+// 思想：创建一个管理事件的对象，让其他对象监听那些事件。
+
+// 基本模式：
+
+function EventTarget(){
+    this.handlers = {};
+}
+
+EventTarget.prototype = {
+    constructor:EventTarget,
+    addHandler:function(type,handler){
+        if(typeof this.handlers[type] === "undefined"){
+            this.handlers[type] = [];
+        }
+        this.handlers[type].push(handler);
+    },
+    fire:function(event){
+        if(!event.target){
+            event.target = this;
+        }
+        if(this.handlers[event.type] instanceof Array){
+            const handlers = this.handlers[event.type];
+            handlers.forEach((handler)=>{
+                handler(event);
+            })
+        }
+    },
+    removeHandler:function(type,handler){
+        if(this.handlers[type] instanceof Array){
+            const handlers = this.handlers[type];
+            for(var i = 0,len = handlers.length; i < len; i++){
+                if(handlers[i] === handler){
+                    break;
+                }
+            }
+            handlers.splice(i,1);
+        }
+    }
+};
+
+// EventTarget类型有一个单独的属性handlers，用于存储事件处理程序（观察者）。还有三个方法：addHandler()用于注册给定类型事件的事件处理程序；fire()用于触发一个事件；removeHandler()用于注销某个事件类型的事件处理程序。
+
+// 使用EventTarget类型自定义事件：
+
+function handleMessage(event){
+    console.log("message received:"+event.message);
+}
+//创建一个新对象
+var target = new EventTarget();
+//添加一个事件处理程序
+target.addHandler("message",handleMessage);
+//触发事件
+target.fire({type:"message",message:"Hello World"});
+//删除事件处理程序
+target.removeHandler("message",handleMessage);
+//再次触发事件，应没有事件处理程序
+target.fire({type:"message",message:"Hello World"});
+
+// 上述功能是封装在一个自定义类型中，其他对象可以通过继承EventTarget获得这个行为。 
+// 如下：
+
+function Person(name,age){
+    EventTarget.call(this);
+    this.name = name;
+    this.age = age;
+}
+inheritPrototype(EventTarget,Person);
+
+Person.prototype.say = function(message){
+    this.fire({type:"message",message:message});
+};
+
+// 上述例子中使用的继承方式为：寄生组合继承，详情可以查看 
+// JavaScript继承实现方式。 
+// 下面我们举例说明一下上面定义的Person如何使用：
+
+function handleMessage(event){
+    console.log(event.target.name + "says" + event.message);
+}
+//创建新Person
+ var person = new Person("James",28);
+ //添加事件处理程序
+ person.addHandler("message",handleMessage);
+ //在person对象上条用say方法，触发消息事件
+ person.say("Hi there");
 
 
