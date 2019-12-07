@@ -1,0 +1,52 @@
+<center>
+    <img src="images/Bitmap@2x.png" class="avatar">
+    <input type="file" id="file" accept="image/*" capture='camera' multiple>
+</center>
+
+<style>
+
+#file {
+    display: none;
+}
+
+</style>
+
+
+<script>
+
+$(".avatar").click(function(){
+    $("#file").trigger("click")
+})
+
+//ios去掉capture属性
+ var file = document.querySelector('input');
+ if (getIos()) {
+    file.removeAttribute("capture");
+  }
+  function getIos() {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/iPhone\sOS/i) == "iphone os") {
+       return true;
+   } else {
+      return false;
+   }
+ }
+
+
+
+</script>
+
+
+<!-- 我们利用input 输入框 ，把type属性改为file, 然后调用系统默认相机，摄像，系统相册。
+
+accept：表示要打开的文件类型      capture：表示可以捕获到系统默认的设备 -->
+
+ 
+
+< input type="file" accept="image/*" capture="camera">  相机
+ 
+< input type="file" accept="video/*" capture="camcorder"> 录像
+ 
+< input type="file" accept="audio/*" capture="microphone"> 录音
+ 
+< input type="file" accept="image/*" multiple>  多选
