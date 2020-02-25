@@ -1,0 +1,278 @@
+<!--pages/jp_cp/jp_cp.wxml-->
+<view class="container">
+    <view>请输入车牌号码：</view>
+    <view class="chepai">
+        <view class="tel" bindtap="d1">{{carNo}}</view>
+    </view>
+    <!-- 省 -->
+    <view class="provinces" hidden='{{hidden1}}'>
+        <view class="pro_li lf" wx:for="{{item1}}" bindtap='sheng' data-sh="{{item}}">{{item}}</view>
+        <view class="pro_del lf" bindtap='null'>清空</view>
+        <view class="pro_close lf" bindtap='d2'>关闭</view>
+    </view>
+    <!-- 号码	 -->
+    <view class="keyNums" hidden='{{hidden2}}'>
+        <view class="pro_li lf" wx:for="{{item2}}" bindtap='other' data-ot="{{item}}">{{item}}</view>
+        <view class="bot">
+            <view class="pro_ok lf" bindtap='ok'>OK</view>
+            <view class="pro_d lf" bindtap='del'>Del</view>
+        </view>
+    </view>
+</view>
+
+
+
+<style>
+    /* pages/jp_cp/jp_cp.wxss */
+    .lf {
+        float: left;
+    }
+
+    .rt {
+        float: right;
+    }
+
+    .tel {
+        border-bottom: 2rpx solid #ddd;
+        height: 100rpx;
+        line-height: 100rpx;
+    }
+
+    .chepai {
+        height: 200rpx;
+        line-height: 200rpx;
+    }
+
+    .provinces {
+        overflow: hidden;
+        background-color: #CED3D9;
+        padding: 30rpx 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 10000;
+    }
+
+    .pro_li {
+        font-size: 36rpx;
+        height: 70rpx;
+        width: 70rpx;
+        line-height: 70rpx;
+        text-align: center;
+        border: 2rpx solid #ddd;
+        margin: 5rpx;
+        background-color: #fff;
+    }
+
+    .pro_close {
+        width: 100rpx;
+        height: 70rpx;
+        line-height: 70rpx;
+        font-size: 32rpx;
+        text-align: center;
+        background-color: #fff;
+        border: 2rpx solid #ddd;
+        margin: 5rpx;
+    }
+
+    .pro_del {
+        width: 100rpx;
+        height: 70rpx;
+        line-height: 70rpx;
+        font-size: 32rpx;
+        text-align: center;
+        background-color: #fff;
+        border: 2rpx solid #ddd;
+        margin: 5rpx;
+    }
+
+    .keyNums {
+        overflow: hidden;
+        background-color: #CED3D9;
+        padding: 30rpx 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 10000;
+    }
+
+    .pro_ok {
+        width: 100rpx;
+        height: 70rpx;
+        line-height: 70rpx;
+        font-size: 32rpx;
+        text-align: center;
+        background-color: #fff;
+        border: 2rpx solid #ddd;
+        margin: 5rpx;
+        /* margin-left: 35%; */
+    }
+
+    .pro_d {
+        width: 100rpx;
+        height: 70rpx;
+        line-height: 70rpx;
+        font-size: 32rpx;
+        text-align: center;
+        background-color: #fff;
+        border: 2rpx solid #ddd;
+        margin: 5rpx;
+    }
+</style>
+
+
+
+<script>
+    // pages/jp_cp/jp_cp.js
+    Page({
+
+        /**
+        * 页面的初始数据
+        */
+        data: {
+            item1: ["京", "沪", "浙", "苏", "粤", "鲁", "晋", "冀",
+                "豫", "川", "渝", "辽", "吉", "黑", "皖", "鄂",
+                "津", "贵", "云", "桂", "琼", "青", "新", "藏",
+                "蒙", "宁", "甘", "陕", "闽", "赣", "湘"],
+            item2: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
+                "A", "S", "D", "F", "G", "H", "J", "K", "L",
+                "Z", "X", "C", "V", "B", "N", "M"],
+            hidden1: true,
+            hidden2: true,
+            carNo: '',
+        },
+        //车牌输入获取焦点
+        d1: function () {
+            var that = this;
+            if (that.data.carNo == '') {
+                that.setData({
+                    hidden1: false,
+                    hidden2: true
+                })
+            } else {
+                that.setData({
+                    hidden1: true,
+                    hidden2: false
+                })
+            }
+
+        },
+        //车牌输入失去焦点
+        d2: function () {
+            var that = this;
+            that.setData({
+                hidden1: true,
+                hidden2: true
+            })
+        },
+        //获取车牌省份
+        sheng: function (e) {
+            var that = this;
+            console.log(e.currentTarget.dataset.sh);
+            that.setData({
+                carNo: e.currentTarget.dataset.sh
+            })
+            if (that.data.carNo != '') {
+                that.setData({
+                    hidden1: true,
+                    hidden2: false
+                })
+            }
+        },
+        //获取车牌号码
+        other: function (e) {
+            var that = this;
+            console.log(e.currentTarget.dataset.ot);
+            var carNo = that.data.carNo + e.currentTarget.dataset.ot;
+            that.setData({
+                carNo: carNo
+            })
+        },
+        //回删车牌
+        del: function () {
+            var that = this;
+            var ss = that.data.carNo;
+            console.log(ss);
+            var s = ss.split('');
+            console.log(s);
+            console.log(s.slice(0, -1));
+            if (s.slice(0, -1).length == 0) {
+                that.setData({
+                    hidden1: false,
+                    hidden2: true
+                })
+            }
+            console.log(s.join('').slice(0, -1));
+            var s = s.join('').slice(0, -1);
+            that.setData({
+                carNo: s
+            })
+            console.log(that.data.carNo.length);
+
+        },
+        //确认输入
+        ok: function () {
+            var that = this;
+            that.setData({
+                hidden1: true,
+                hidden2: true
+            })
+        },
+        /**
+        * 生命周期函数--监听页面加载
+        */
+        onLoad: function (options) {
+
+        },
+
+        /**
+        * 生命周期函数--监听页面初次渲染完成
+        */
+        onReady: function () {
+
+        },
+
+        /**
+        * 生命周期函数--监听页面显示
+        */
+        onShow: function () {
+
+        },
+
+        /**
+        * 生命周期函数--监听页面隐藏
+        */
+        onHide: function () {
+
+        },
+
+        /**
+        * 生命周期函数--监听页面卸载
+        */
+        onUnload: function () {
+
+        },
+
+        /**
+        * 页面相关事件处理函数--监听用户下拉动作
+        */
+        onPullDownRefresh: function () {
+
+        },
+
+        /**
+        * 页面上拉触底事件的处理函数
+        */
+        onReachBottom: function () {
+
+        },
+
+        /**
+        * 用户点击右上角分享
+        */
+        onShareAppMessage: function () {
+
+        }
+    })
+</script>
