@@ -1,0 +1,326 @@
+<!-- 首先说一下js网页打印的几种方法：
+
+1.window.print()
+
+会弹出打印对话框
+
+2.使用html 标签引入Webbrowser控件
+
+ 这种方式是其只兼容IE10以下的浏览器，其他浏览器不可使用
+
+3.document.execCommand(”print”)
+
+类似window.print() 
+ **4.采用JQuery插件
+
+5.用浏览器打印第三方插件如lodpod等**
+
+由于我这边不需要兼容ie10以下，而且个人不喜欢在react项目中引入jquery，同时嫌第三方插件太麻烦，最终选择window.print()，具体这几种方法区别大家可以去网上查一下，这类博客很多。
+
+ 废话不多说，直接贴代码 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=" utf-8">
+  <title>打印</title>
+  <link rel="stylesheet" href="./print.css" rel="external nofollow" type="text/css">
+  <style type="text/css">
+    @import url("print.css") print;
+  </style>
+  <script language="javascript">
+      function remove_ie_header_and_footer() {
+        let HKEY_Root, HKEY_Path, HKEY_Key;
+        HKEY_Root = "HKEY_CURRENT_USER";
+        HKEY_Path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+        try {
+          let RegWsh = new ActiveXObject("WScript.Shell");
+          HKEY_Key = "header";
+          RegWsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "");
+          HKEY_Key = "footer";
+          RegWsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "");
+        }
+        catch (e) {}
+      }
+      function printPage(printpage)
+      {
+        if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
+          remove_ie_header_and_footer();
+        }
+        let newstr = printpage.innerHTML;
+        let oldstr = document.body.innerHTML;
+        document.body.innerHTML =newstr;
+        window.print();
+        document.body.innerHTML=oldstr;
+        return false;
+      }
+      window.onload = function()
+      {
+        let bt=document.getElementById("bt");
+        let page=document.getElementById("printPage");
+        bt.onclick=function()
+        {
+          printPage(page);
+        }
+      }
+  </script>
+</head>
+<body>
+<!--startPrint-->
+<div id="printPage" >
+  <div id="emsType" class="left">
+    <span class="deviation">标准快递</span>
+  </div>
+  <div id="barcode" class="right">
+    <span class="deviation">二维码</span>
+  </div>
+  <div id="sender" class="left">
+    <span class="deviation">寄件：</span>
+    <span>xxxx</span>
+  </div>
+  <div id="area" class="right">
+    <span class="deviation">xxx区</span>
+  </div>
+  <div id="recipient" class="left">
+    <span class="deviation">收件：</span>
+    <span class="deviation">xxxx人xxxx手机xxxxxxx</span>
+    <span class="deviation">xxxxxxxx小区</span>
+  </div>
+  <div id="pay" class="left">
+    <span class="deviation">付款方式：</span>
+    <span></span>
+    <br/>
+    <span class="deviation">计费重量（KG）：</span>
+    <span></span>
+    <br/>
+    <span class="deviation">保价金额（元）：</span>
+    <span></span>
+    <br/>
+  </div>
+  <div id="delivers" class="right">
+    <span class="deviation">收件人\代收人：</span>
+    <span></span>
+    <br/>
+    <span class="deviation">签收时间：</span>
+    <span></span>
+    <span>年</span>
+    <span></span>
+    <span>月</span>
+    <span></span>
+    <span>日</span>
+    <span></span>
+    <span>时</span>
+    <br/>
+    <span id="note">快件送达收货人地址，经收件人或收件人允许的代收人签字，视为送达</span>
+  </div>
+  <div id="order" class="left">
+    <span class="deviation">订单号：</span>
+    <span></span>
+    <span class="deviation">件数：</span>
+    <span></span>
+    <span class="deviation">重量（KG）：</span>
+    <span></span>
+    <span></span>
+  </div>
+  <div id="divide" class="left">
+  </div>
+  <div id="number" class="left right">
+    <span class="deviation">条码</span>
+  </div>
+  <div id="send" class="left right">
+    <span class="deviation">寄件：</span>
+    <span></span>
+  </div>
+  <div id="pickup" class="right">
+    <span class="deviation">收件：</span>
+    <span></span>
+  </div>
+  <div id="remark" class="left">
+    <span class="deviation">备注：</span>
+    <span></span>
+  </div>
+  <div id="net" class="left">
+    <span class="deviation">www.ems.cn      客服电话：11183</span>
+  </div>
+  <div id="QRCode" class="right">
+    <span class="deviation">二维码</span>
+  </div>
+</div>
+<!--endPrint-->
+<input name="print" class=" no-print" type="button" id="bt" value="点击打印" />
+</body>
+</html>
+
+
+<!-- 通过css3 print控制打印样式，不需要打印的可以通过添加 class为noPrint来隐藏 -->
+
+
+<style>
+@media print{
+  body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
+  body, button, input, select, textarea { font:12px/1.5 arial,"黑体", \5b8b\4f53; }
+  h1, h2, h3, h4, h5, h6{ font-size:100%; }
+  address, cite, dfn, em, var { font-style:normal; }
+  code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+  small{ font-size:12px; }
+  ul, ol { list-style:none; }
+  a { text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  sup { vertical-align:text-top; }
+  sub{ vertical-align:text-bottom; }
+  legend { color:#000; }
+  fieldset, img { border:0; }
+  button, input, select, textarea { font-size:100%; }
+  table { border-collapse:collapse; border-spacing:0; }
+  .no-print{
+    display:none;
+  }
+  @page{
+    size: 100mm 150mm;
+    margin: 1.75mm;
+  }
+  #printPage {
+    width: 96mm;
+    height: 146mm;
+    position: relative;
+    border: 1px dotted #000000;
+    box-sizing: border-box;
+  }
+  #printPage span{
+    margin-left: 2mm;
+  }
+  .left {
+    border-left: 1px dotted #000000;
+    border-right: 1px dotted #000000;
+    border-bottom: 1px dotted #000000;
+    left: 0;
+  }
+  .right {
+    border-right: 1px dotted #000000;
+    border-bottom: 1px dotted #000000;
+    /*right: 0;*/
+  }
+  .deviation{
+    margin-left: 2mm;
+  }
+  #emsType{
+    width: 40mm;
+    height: 14mm;
+    position: absolute;
+    top: 0;
+    padding-top: 6mm;
+    font-size: 20px;
+    border-top: 1px dotted #000000;
+  }
+  #barcode{
+    width: 56mm;
+    height: 20mm;
+    position: absolute;
+    top: 0;
+    left: 40mm;
+    border-top: 1px dotted #000000;
+  }
+  #sender{
+    width: 46mm;
+    height: 15mm;
+    font-size: 12px;
+    position: absolute;
+    top: 20mm;
+  }
+  #area{
+    width: 50mm;
+    height: 15mm;
+    position: absolute;
+    top: 20mm;
+    left: 46mm;
+  }
+  #recipient{
+    width: 96mm;
+    height: 17mm;
+    position: absolute;
+    left: 0;
+    top: 35mm;
+    font-size: 12px;
+  }
+  #pay{
+    width: 40mm;
+    height: 14mm;
+    position: absolute;
+    top: 52mm;
+    font-size: 12px;
+  }
+  #delivers{
+    width: 56mm;
+    height: 14mm;
+    position: absolute;
+    top: 52mm;
+    left: 40mm;
+    font-size: 12px;
+  }
+  #order{
+    width: 96mm;
+    height: 20mm;
+    position: absolute;
+    left: 0;
+    top: 66mm;
+    font-size: 12px;
+  }
+  #divide{
+    width: 96mm;
+    height: 4mm;
+    position: absolute;
+    left: 0;
+    top: 86mm;
+  }
+  #number{
+    width: 96mm;
+    height: 15mm;
+    position: absolute;
+    left: 0;
+    top: 90mm;
+    font-size: 12px;
+  }
+  #send{
+    width: 40mm;
+    height: 17mm;
+    position: absolute;
+    top: 105mm;
+    font-size: 12px;
+  }
+  #pickup{
+    width: 56mm;
+    height: 17mm;
+    position: absolute;
+    top: 105mm;
+    left: 40mm;
+    font-size: 12px;
+  }
+  #remark{
+    width: 68mm;
+    height: 17mm;
+    position: absolute;
+    top: 122mm;
+    font-size: 12px;
+  }
+  #net{
+    width: 68mm;
+    height: 7mm;
+    position: absolute;
+    top: 139mm;
+    font-size: 12px;
+  }
+  #QRCode{
+    width: 28mm;
+    height: 24mm;
+    position: absolute;
+    top: 122mm;
+    left: 68mm;
+  }
+  #note{
+    font-size: 6px;
+  }
+}</style>
+
+<!-- 一开始在ff和chrome打印出来的会有细微差别，这是由于浏览器自带样式的影响，清除浏览器样式后基本没区别了还有就是chrome需要将浏览器设置里自定义字体中最小字体调到最低，不然会影响打印效果 ff这需要在打印里设置页头页脚为空白，不然打印的带页头页脚。 
+ 此外chrome打印出来的比ff清楚，这点原因我还没搞清楚。 
+ 贴两张打印预览，上面是chrome，下面是ff -->
