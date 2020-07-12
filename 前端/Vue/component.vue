@@ -41,3 +41,42 @@ export default {
   }
 }
  </script>
+
+
+
+
+<template>
+  <div id="app">
+    <component :is="key"></component>
+  </div>
+</template>
+ <script>
+var componentA = {
+  template: `<div style="color:red">我是A组件</div>`
+};
+
+var componentB = {
+  template: `<div style="color:blank">我是B组件</div>`
+};
+
+var componentC = {
+  template: `<div style="color:pink">我是C组件</div>`
+};
+export default {
+  name: "component",
+  data () {
+    return {
+      key: "comC"
+    };
+  },
+  methods: {
+  },
+  components: {
+    comA: componentA,
+    comB: componentB,
+    comC: componentC
+  }
+};
+
+</script>
+ 
